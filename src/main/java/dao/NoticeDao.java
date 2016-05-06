@@ -131,9 +131,9 @@ public class NoticeDao {
 
 	public Notice getNotice(String seq) throws ClassNotFoundException, SQLException
 	{
-		String sql = "SELECT * FROM NOTICES WHERE SEQ="+seq;
+		String sql = "SELECT * FROM NOTICES WHERE SEQ=?";
 
-		Notice notice = template.queryForObject(sql, new RowMapper<Notice>() {
+		Notice notice = template.queryForObject(sql, new Object[] {seq} , new RowMapper<Notice>() {
 			@Override
 			public Notice mapRow(ResultSet resultSet, int i) throws SQLException {
 
