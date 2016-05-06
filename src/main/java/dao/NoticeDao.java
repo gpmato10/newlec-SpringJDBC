@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
@@ -54,39 +55,63 @@ public class NoticeDao {
 		String sql = "select * from";
 		sql += " notices where " + field + " like ? order by regdate desc limit ?,?";
 
-		// 0. 드라이버 로드
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+query+"%");
-		st.setInt(2, srow);
-		st.setInt(3, erow);
-		// 3. 결과
-		ResultSet rs = st.executeQuery();
+		return template.query(sql, new Object[]{"%" + query + "%", srow, erow}, new RowMapper<Notice>() {
+			@Override
+			public Notice mapRow(ResultSet resultSet, int i) throws SQLException {
+				Notice vo = new Notice();
+				vo.setSeq(resultSet.getString("seq"));
+				vo.setTitle(resultSet.getString("title"));
+				vo.setWriter(resultSet.getString("title"));
+				vo.setRegdate(resultSet.getDate("regdate"));
+				vo.setHit(resultSet.getInt("hit"));
+				vo.setContent(resultSet.getString("content"));
+				vo.setFileSrc(resultSet.getString("fileSrc"));
 
-		List<Notice> list = new ArrayList<Notice>();
+				return vo;
+			}
+		});
 
-		while(rs.next()){
-			Notice n = new Notice();
-			n.setSeq(rs.getString("seq"));
-			n.setTitle(rs.getString("title"));
-			n.setWriter(rs.getString("writer"));
-			n.setContent(rs.getString("content"));
-			n.setRegdate(rs.getDate("regdate"));
-			n.setHit(rs.getInt("hit"));
-			n.setFileSrc(rs.getString("filesrc"));
 
-			list.add(n);
-		}
 
-		rs.close();
-		st.close();
-		con.close();
-
-		return list;
+//		int srow = 0 + (page-1) * 15;
+//		int erow = 14 + (page-1) * 15;
+//
+//		String sql = "select * from";
+//		sql += " notices where " + field + " like ? order by regdate desc limit ?,?";
+//
+//		// 0. 드라이버 로드
+//		Class.forName("com.mysql.jdbc.Driver");
+//		// 1. 접속
+//		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
+//				"root", "123123");
+//		// 2. 실행
+//		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, "%"+query+"%");
+//		st.setInt(2, srow);
+//		st.setInt(3, erow);
+//		// 3. 결과
+//		ResultSet rs = st.executeQuery();
+//
+//		List<Notice> list = new ArrayList<Notice>();
+//
+//		while(rs.next()){
+//			Notice n = new Notice();
+//			n.setSeq(rs.getString("seq"));
+//			n.setTitle(rs.getString("title"));
+//			n.setWriter(rs.getString("writer"));
+//			n.setContent(rs.getString("content"));
+//			n.setRegdate(rs.getDate("regdate"));
+//			n.setHit(rs.getInt("hit"));
+//			n.setFileSrc(rs.getString("filesrc"));
+//
+//			list.add(n);
+//		}
+//
+//		rs.close();
+//		st.close();
+//		con.close();
+//
+//		return list;
 	}
 	
 	public int delete(String seq) throws ClassNotFoundException, SQLException
