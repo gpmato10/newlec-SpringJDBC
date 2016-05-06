@@ -9,10 +9,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import vo.Notice;
 
 public class NoticeDao {
-	
+
+	@Autowired
+	private JdbcTemplate template;
+
+
 	public int getCount(String field, String query) throws ClassNotFoundException, SQLException
 	{
 		String sql = "SELECT COUNT(*) CNT FROM NOTICES WHERE "+field+" LIKE ?";
@@ -40,13 +48,9 @@ public class NoticeDao {
 	
 	public List<Notice> getNotices(int page, String field, String query) throws ClassNotFoundException, SQLException
 	{
-
 		int srow = 0 + (page-1) * 15;
 		int erow = 14 + (page-1) * 15;
-		
-//		String sql = "SELECT * FROM";
-//		sql += "(SELECT ROWNUM NUM, N.* FROM (SELECT * FROM NOTICES WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N)";
-//		sql += "WHERE NUM BETWEEN ? AND ?";
+
 		String sql = "select * from";
 		sql += " notices where " + field + " like ? order by regdate desc limit ?,?";
 
@@ -62,9 +66,9 @@ public class NoticeDao {
 		st.setInt(3, erow);
 		// 3. 결과
 		ResultSet rs = st.executeQuery();
-		
+
 		List<Notice> list = new ArrayList<Notice>();
-		
+
 		while(rs.next()){
 			Notice n = new Notice();
 			n.setSeq(rs.getString("seq"));
@@ -74,14 +78,14 @@ public class NoticeDao {
 			n.setRegdate(rs.getDate("regdate"));
 			n.setHit(rs.getInt("hit"));
 			n.setFileSrc(rs.getString("filesrc"));
-			
+
 			list.add(n);
 		}
-		
+
 		rs.close();
 		st.close();
 		con.close();
-		
+
 		return list;
 	}
 	
@@ -123,35 +127,31 @@ public class NoticeDao {
 		
 		return af;
 	}
-	
+
+
 	public Notice getNotice(String seq) throws ClassNotFoundException, SQLException
 	{
 		String sql = "SELECT * FROM NOTICES WHERE SEQ="+seq;
-		// 0. 드라이버 로드
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		Statement st = con.createStatement();
-		// 3. 결과
-		ResultSet rs = st.executeQuery(sql);
-		rs.next();
-		
-		Notice n = new Notice();
-		n.setSeq(rs.getString("seq"));
-		n.setTitle(rs.getString("title"));
-		n.setWriter(rs.getString("writer"));
-		n.setRegdate(rs.getDate("regdate"));
-		n.setHit(rs.getInt("hit"));
-		n.setContent(rs.getString("content"));
-		n.setFileSrc(rs.getString("fileSrc"));
-		
-		rs.close();
-		st.close();
-		con.close();
-		
-		return n;
+
+		Notice notice = template.queryForObject(sql, new RowMapper<Notice>() {
+			@Override
+			public Notice mapRow(ResultSet resultSet, int i) throws SQLException {
+
+				Notice vo = new Notice();
+				vo.setSeq(resultSet.getString("seq"));
+				vo.setTitle(resultSet.getString("title"));
+				vo.setWriter(resultSet.getString("title"));
+				vo.setRegdate(resultSet.getDate("regdate"));
+				vo.setHit(resultSet.getInt("hit"));
+				vo.setContent(resultSet.getString("content"));
+				vo.setFileSrc(resultSet.getString("fileSrc"));
+
+				return vo;
+			}
+		});
+
+		return notice;
+
 	}
 
 	public int insert(Notice n) throws ClassNotFoundException, SQLException {

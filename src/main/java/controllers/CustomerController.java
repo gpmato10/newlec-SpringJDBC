@@ -32,7 +32,7 @@ public class CustomerController {
     }
 
     @RequestMapping("notice.htm")
-    public String noticees(String pg, String f, String q, Model model) throws SQLException, ClassNotFoundException {
+    public String notices(String pg, String f, String q, Model model) throws SQLException, ClassNotFoundException {
 
         //        넘겨받은 값 있을때 쓰는 값들.
 
