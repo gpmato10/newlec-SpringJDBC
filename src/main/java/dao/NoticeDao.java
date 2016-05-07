@@ -25,26 +25,31 @@ public class NoticeDao {
 	public int getCount(String field, String query) throws ClassNotFoundException, SQLException
 	{
 		String sql = "SELECT COUNT(*) CNT FROM NOTICES WHERE "+field+" LIKE ?";
-		
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+query+"%");
-		
-		// 3. 결과
-		ResultSet rs = st.executeQuery();
-		rs.next();
-		
-		int cnt = rs.getInt("cnt");
-		
-		rs.close();
-		st.close();
-		con.close();
-		
-		return cnt;
+
+		return template.queryForInt(sql, "%" + query + "%");
+
+
+//		String sql = "SELECT COUNT(*) CNT FROM NOTICES WHERE "+field+" LIKE ?";
+//
+//		Class.forName("com.mysql.jdbc.Driver");
+//		// 1. 접속
+//		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
+//				"root", "123123");
+//		// 2. 실행
+//		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, "%"+query+"%");
+//
+//		// 3. 결과
+//		ResultSet rs = st.executeQuery();
+//		rs.next();
+//
+//		int cnt = rs.getInt("cnt");
+//
+//		rs.close();
+//		st.close();
+//		con.close();
+//
+//		return cnt;
 	}
 	
 	public List<Notice> getNotices(int page, String field, String query) throws ClassNotFoundException, SQLException

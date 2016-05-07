@@ -54,6 +54,7 @@ public class CustomerController {
 
 //        NoticeDao dao = new NoticeDao();
         List<Notice> list = noticeDao.getNotices(page, field, query);
+        model.addAttribute("count", noticeDao.getCount(field, query));
 
 
 //        ModelAndView mv = new ModelAndView("notice.jsp");

@@ -128,7 +128,7 @@
 					</p>
 					<p id="cur-page" class="margin-small">
 						<span class="strong">1</span> /
-						10	page
+						${count/15}	page
 					</p>
 					<div id="pager-wrapper" class="margin-small">
 						<div class="pager clear">
