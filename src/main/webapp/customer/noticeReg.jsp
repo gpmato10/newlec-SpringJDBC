@@ -93,7 +93,7 @@
 									첨부파일
 								</dt>
 								<dd class="article-detail-data">
-									&nbsp;<input type="file" id="txtFile" name="file[0]" />
+									&nbsp;<input type="file" id="txtFile" name="file" />
 								</dd>
 							</dl>
 							<dl class="article-detail-row">
@@ -101,7 +101,7 @@
 									첨부파일
 								</dt>
 								<dd class="article-detail-data">
-									&nbsp;<input type="file" id="txtFile" name="file[1]" />
+									&nbsp;<input type="file" id="txtFile" name="file" />
 								</dd>
 							</dl>
 	

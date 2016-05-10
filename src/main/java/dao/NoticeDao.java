@@ -185,25 +185,32 @@ public class NoticeDao {
 	}
 
 	public int insert(Notice n) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
 		String sql = "INSERT INTO NOTICES(TITLE, CONTENT, WRITER, HIT, FILESRC) \n" +
 				"VALUES(?, ?, 'newlec', HIT, ?)";
-		// 0. 드라이버 로드
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, n.getTitle());
-		st.setString(2, n.getContent());
-		st.setString(3, n.getFileSrc());
-		
-		int af = st.executeUpdate();
-		
-		st.close();
-		con.close();
-		
-		return af;
+
+		return template.update(sql, n.getTitle(),n.getContent(), n.getFileSrc());
+
+//		return template.update(sql);
+
+
+//		String sql = "INSERT INTO NOTICES(TITLE, CONTENT, WRITER, HIT, FILESRC) \n" +
+//				"VALUES(?, ?, 'newlec', HIT, ?)";
+//		// 0. 드라이버 로드
+//		Class.forName("com.mysql.jdbc.Driver");
+//		// 1. 접속
+//		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
+//				"root", "123123");
+//		// 2. 실행
+//		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, n.getTitle());
+//		st.setString(2, n.getContent());
+//		st.setString(3, n.getFileSrc());
+//
+//		int af = st.executeUpdate();
+//
+//		st.close();
+//		con.close();
+//
+//		return af;
 	}
 }

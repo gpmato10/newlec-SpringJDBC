@@ -82,6 +82,7 @@ public class CustomerController {
 
     @RequestMapping(value = "noticeReg.htm", method = RequestMethod.POST)
     public String noticeReg(Notice n, HttpServletRequest request /*String title, String content*/) throws SQLException, ClassNotFoundException, IOException {
+        System.out.println(n.getTitle() + ", " + n.getFileSrc());
 
         List<CommonsMultipartFile> files = n.getFile();
         for (int i=0; i<files.size(); i++) {
@@ -99,6 +100,7 @@ public class CustomerController {
                 fs.write(files.get(i).getBytes());
                 fs.close();
 
+                n.setFileSrc(fname);    // 이거 잊지 말자 : Notice 객체에 파일경로값은 컨트롤러에서 못 읽어오더라.
 
                 System.out.println(fname);
                 /*NoticeFile nf = new NoticeFile();
