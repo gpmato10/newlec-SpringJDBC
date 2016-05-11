@@ -77,7 +77,7 @@
 							공지사항수정
 						</li>
 					</ul>
-					<form action="noticeEdit.htm" method="post">
+					<form action="noticeEdit.htm" method="post" enctype="multipart/form-data">
 					<div id="notice-article-detail" class="article-detail margin-large" >						
 						<dl class="article-detail-row">
 							<dt class="article-detail-title">

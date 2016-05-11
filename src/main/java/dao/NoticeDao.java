@@ -119,41 +119,49 @@ public class NoticeDao {
 	
 	public int delete(String seq) throws ClassNotFoundException, SQLException
 	{
-		// 2. 데이터 베이스 연동을 위한 쿼리와 실행 코드 작성
 		String sql = "DELETE FROM NOTICES WHERE SEQ=?";
-		// 0. 드라이버 로드
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		PreparedStatement st = con.prepareStatement(sql);	
-		st.setString(1, seq);
-		
-		int af = st.executeUpdate();
-		
-		return af;
+		return template.update(sql, seq);
+
+//		// 2. 데이터 베이스 연동을 위한 쿼리와 실행 코드 작성
+//		String sql = "DELETE FROM NOTICES WHERE SEQ=?";
+//		// 0. 드라이버 로드
+//		Class.forName("com.mysql.jdbc.Driver");
+//		// 1. 접속
+//		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
+//				"root", "123123");
+//		// 2. 실행
+//		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, seq);
+//
+//		int af = st.executeUpdate();
+//
+//		return af;
 	}
 	
 	public int update(Notice notice) throws ClassNotFoundException, SQLException{
-		
-		// 2. 데이터 베이스를 연동하기 위한 쿼리와 데이터베이스 연동을 위한 코드를 작성
+
 		String sql = "UPDATE NOTICES SET TITLE=?, CONTENT=?, FILESRC=? WHERE SEQ=?";
-		// 0. 드라이버 로드
-		Class.forName("com.mysql.jdbc.Driver");
-		// 1. 접속
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
-				"root", "123123");
-		// 2. 실행
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, notice.getTitle());
-		st.setString(2, notice.getContent());
-		st.setString(3, notice.getFileSrc());
-		st.setString(4, notice.getSeq());		
-		
-		int af = st.executeUpdate();
-		
-		return af;
+
+		return template.update(sql, notice.getTitle(), notice.getContent(), notice.getFileSrc(), notice.getSeq());
+
+
+//		// 2. 데이터 베이스를 연동하기 위한 쿼리와 데이터베이스 연동을 위한 코드를 작성
+//		String sql = "UPDATE NOTICES SET TITLE=?, CONTENT=?, FILESRC=? WHERE SEQ=?";
+//		// 0. 드라이버 로드
+//		Class.forName("com.mysql.jdbc.Driver");
+//		// 1. 접속
+//		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/newlecspring",
+//				"root", "123123");
+//		// 2. 실행
+//		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, notice.getTitle());
+//		st.setString(2, notice.getContent());
+//		st.setString(3, notice.getFileSrc());
+//		st.setString(4, notice.getSeq());
+//
+//		int af = st.executeUpdate();
+//
+//		return af;
 	}
 
 
