@@ -12,19 +12,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import vo.Notice;
 
-public class NoticeDao {
+public class NoticeDao extends JdbcDaoSupport{
 
-	@Autowired
-	private JdbcTemplate template;
 
 
 	public int getCount(String field, String query) throws ClassNotFoundException, SQLException
 	{
 		String sql = "SELECT COUNT(*) CNT FROM NOTICES WHERE "+field+" LIKE ?";
 
-		return template.queryForInt(sql, "%" + query + "%");
+		return getJdbcTemplate().queryForInt(sql, "%" + query + "%");
 
 
 //		String sql = "SELECT COUNT(*) CNT FROM NOTICES WHERE "+field+" LIKE ?";
@@ -58,7 +57,7 @@ public class NoticeDao {
 		String sql = "select * from";
 		sql += " notices where " + field + " like ? order by regdate desc limit ?,?";
 
-		return template.query(sql, new Object[]{"%" + query + "%", srow, erow}, new RowMapper<Notice>() {
+		return getJdbcTemplate().query(sql, new Object[]{"%" + query + "%", srow, erow}, new RowMapper<Notice>() {
 			@Override
 			public Notice mapRow(ResultSet resultSet, int i) throws SQLException {
 				Notice vo = new Notice();
@@ -120,7 +119,7 @@ public class NoticeDao {
 	public int delete(String seq) throws ClassNotFoundException, SQLException
 	{
 		String sql = "DELETE FROM NOTICES WHERE SEQ=?";
-		return template.update(sql, seq);
+		return getJdbcTemplate().update(sql, seq);
 
 //		// 2. 데이터 베이스 연동을 위한 쿼리와 실행 코드 작성
 //		String sql = "DELETE FROM NOTICES WHERE SEQ=?";
@@ -142,7 +141,7 @@ public class NoticeDao {
 
 		String sql = "UPDATE NOTICES SET TITLE=?, CONTENT=?, FILESRC=? WHERE SEQ=?";
 
-		return template.update(sql, notice.getTitle(), notice.getContent(), notice.getFileSrc(), notice.getSeq());
+		return getJdbcTemplate().update(sql, notice.getTitle(), notice.getContent(), notice.getFileSrc(), notice.getSeq());
 
 
 //		// 2. 데이터 베이스를 연동하기 위한 쿼리와 데이터베이스 연동을 위한 코드를 작성
@@ -169,7 +168,7 @@ public class NoticeDao {
 	{
 		String sql = "SELECT * FROM NOTICES WHERE SEQ=?";
 
-		Notice notice = template.queryForObject(sql, new Object[] {seq} , new RowMapper<Notice>() {
+		Notice notice = getJdbcTemplate().queryForObject(sql, new Object[] {seq} , new RowMapper<Notice>() {
 			@Override
 			public Notice mapRow(ResultSet resultSet, int i) throws SQLException {
 
@@ -193,7 +192,7 @@ public class NoticeDao {
 	public int insert(final Notice n) throws ClassNotFoundException, SQLException {
 
 
-		return template.update(new PreparedStatementCreator() {
+		return getJdbcTemplate().update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				String sql = "INSERT INTO NOTICES(TITLE, CONTENT, WRITER, HIT, FILESRC) \n" +

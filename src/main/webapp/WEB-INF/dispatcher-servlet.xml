@@ -7,10 +7,8 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="controllers"/>
 
-	<bean id="noticeDao" class="dao.NoticeDao">
-	</bean>
+	<context:component-scan base-package="controllers"/>
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10000000"/>
@@ -23,9 +21,13 @@
 		<property name="password" value="123123"/>
 	</bean>
 
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<bean id="noticeDao" class="dao.NoticeDao">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
+
+	<!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+		<!--<property name="dataSource" ref="dataSource"/>-->
+	<!--</bean>-->
 	<!--<bean name="/customer/notice.htm" class="controllers.customer.NoticeController">-->
 
 		<!--<property name="noticeDao" ref="noticeDao"/>-->
