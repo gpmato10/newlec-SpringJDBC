@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import vo.Notice;
@@ -184,13 +185,20 @@ public class NoticeDao {
 
 	}
 
-	public int insert(Notice n) throws ClassNotFoundException, SQLException {
+	public int insert(final Notice n) throws ClassNotFoundException, SQLException {
 		String sql = "INSERT INTO NOTICES(TITLE, CONTENT, WRITER, HIT, FILESRC) \n" +
 				"VALUES(?, ?, 'newlec', HIT, ?)";
 
-		return template.update(sql, n.getTitle(),n.getContent(), n.getFileSrc());
+//		return template.update(sql, n.getTitle(),n.getContent(), n.getFileSrc());
 
-//		return template.update(sql);
+		return template.update(sql, new PreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement st) throws SQLException {
+				st.setString(1, n.getTitle());
+				st.setString(2, n.getContent());
+				st.setString(3, n.getFileSrc());
+			}
+		});
 
 
 //		String sql = "INSERT INTO NOTICES(TITLE, CONTENT, WRITER, HIT, FILESRC) \n" +

@@ -103,11 +103,6 @@ public class CustomerController {
                 n.setFileSrc(fname);    // 이거 잊지 말자 : Notice 객체에 파일경로값은 컨트롤러에서 못 읽어오더라.
 
                 System.out.println(fname);
-                /*NoticeFile nf = new NoticeFile();
-                nf.setNoticeSeq(n.getSeq());
-                nf.setFileSrc(fname);
-                NoticeFileDao.insert(nf);
-                n.setFileSrc(fname); */
             }
         }
 
